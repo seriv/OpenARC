@@ -45,6 +45,8 @@ required for developing applications against libopenarc.
 if [ -d /usr/include/kerberos ]; then
 	INCLUDES="$INCLUDES -I/usr/include/kerberos"
 fi
+aclocal
+autoreconf -i || :
 ./configure --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --libdir=%{_libdir} --mandir=%{_mandir}  CPPFLAGS="$INCLUDES"
 
 make
