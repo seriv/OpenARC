@@ -8,7 +8,8 @@ Release: 1
 License: BSD
 Group: System Environment/Daemons
 Requires: libopenarc = %{version}-%{release}
-BuildRequires: sendmail-devel, openssl-devel
+BuildRequires: sendmail-devel, openssl-devel, automake, autoconf, libtool, libbsd-devel
+
 
 
 Source: openarc-%{version}.tar.gz
