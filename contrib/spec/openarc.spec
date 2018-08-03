@@ -4,7 +4,7 @@
 Summary:	An open source library and milter for providing ARC service
 Name:		openarc
 Version:	1.0.0.beta0
-Release:	8.3
+Release:	8.4
 %define DebianRelease 2
 License:	BSD-2-Clause
 Group:		System Environment/Daemons
@@ -80,11 +80,13 @@ make
 %install
 make install DESTDIR="$RPM_BUILD_ROOT"
 %if 0%{?rhel} >= 7
-install -D -m 0644 contrib/systemd/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
-%elif 0%{?rhel} >= 6
+install -D -m 0644 contrib/systemd/%{name}.service "$RPM_BUILD_ROOT"%{_unitdir}/%{name}.service
+%endif
+%if 0%{?rhel} == 6
 mkdir -p "$RPM_BUILD_ROOT"%{_initrddir}
 install -m 0755 contrib/init/redhat/openarc "$RPM_BUILD_ROOT"%{_initrddir}/%{name}
-%else
+%endif
+%if 0%{?rhel} == 0
 mkdir -p "$RPM_BUILD_ROOT"%{_initrddir}
 install -m 0755 contrib/init/generic/openarc "$RPM_BUILD_ROOT"%{_initrddir}/%{name}
 %endif
@@ -185,21 +187,20 @@ fi
 %doc LICENSE LICENSE.Sendmail README RELEASE_NOTES
 %doc openarc/openarc.conf.sample openarc/openarc.conf.simple
 %config(noreplace) %{_sysconfdir}/openarc.conf
-%config %{_initrddir}/%{name}
 %{_mandir}/*/*
 %{_sbindir}/*
 %if 0%{?suse_version} >= 1200
 %{_unitdir}/%{name}.service
 /usr/lib/tmpfiles.d/%{name}.conf
-%else
-%if 0%{?redhat} >= 7
-/usr/lib/systemd/system/%{name}.service
-%else
+%endif
+%if 0%{?rhel} >= 7
+%{_unitdir}/%{name}.service
+%endif
+%if 0%{?rhel} == 6
 %config %{_initrddir}/%{name}
 %endif
 
 /usr/lib/tmpfiles.d/%{name}.conf
-%endif
 %ghost %attr(755, openarc, openarc) /run/%{name}
 
 %files -n libopenarc0
@@ -215,8 +216,8 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
-* Fri Aug 03 2018 <seriv@cs.umd.edu> - 1.0.0.beta0-8.3
-- Made installable for RHEL6
+* Fri Aug 03 2018 <seriv@cs.umd.edu> - 1.0.0.beta0-8.4
+- Made installable for RHEL6 and RHEL7
 * Wed Aug 01 2018 <rpmbuild@openarc.org> - 1.0.0
 - Fix https://github.com/trusteddomainproject/OpenARC/issues/100
 - Fix https://github.com/trusteddomainproject/OpenARC/issues/102
