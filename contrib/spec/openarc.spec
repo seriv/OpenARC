@@ -4,7 +4,7 @@
 Summary:	An open source library and milter for providing ARC service
 Name:		openarc
 Version:	1.0.0.beta0
-Release:	8.4
+Release:	8.5%{?dist}
 %define DebianRelease 2
 License:	BSD-2-Clause
 Group:		System Environment/Daemons
@@ -27,22 +27,11 @@ BuildRequires:	xz
 PreReq: pwdutils
 # https://en.opensuse.org/openSUSE:Systemd_packaging_guidelines
 BuildRequires: systemd-rpm-macros
+%endif
+
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?suse_version} >= 1200 || 0%{?mageia} >= 6
+BuildRequires:  systemd
 %{?systemd_requires}
-%endif
-
-######### Fedora #################
-%if 0%{?fedora_version} >= 26
-Requires: shadow-utils
-BuildRequires: sendmail-milter-devel
-BuildRequires: libbsd-devel
-%endif
-
-%if 0%{?fedora_version} > 27
-# Package "system-release" exist as
-# - fedora-modular-release
-# - generic-release
-# fedora-modular-release don't exist on build.opensuse.org
-BuildRequires: generic-release
 %endif
 
 %description
@@ -79,26 +68,19 @@ make
 
 %install
 make install DESTDIR="$RPM_BUILD_ROOT"
-%if 0%{?rhel} >= 7
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?suse_version} >= 1200 || 0%{?mageia} >= 6
 install -D -m 0644 contrib/systemd/%{name}.service "$RPM_BUILD_ROOT"%{_unitdir}/%{name}.service
-%endif
-%if 0%{?rhel} == 6
+# BUG? remove macros from service file
+sed -i -e 's|${prefix}||' -e 's|${exec_prefix}|/usr|' %{buildroot}%{_unitdir}/%{name}.service
+%else
 mkdir -p "$RPM_BUILD_ROOT"%{_initrddir}
 install -m 0755 contrib/init/redhat/openarc "$RPM_BUILD_ROOT"%{_initrddir}/%{name}
 %endif
-%if 0%{?rhel} == 0
-mkdir -p "$RPM_BUILD_ROOT"%{_initrddir}
-install -m 0755 contrib/init/generic/openarc "$RPM_BUILD_ROOT"%{_initrddir}/%{name}
-%endif
+
 ln -s service %{buildroot}%{_sbindir}/rc%{name}
 
-%if 0%{?rhel} >= 7
-# BUG? remove macros from service file
-sed -i -e 's|${prefix}||' -e 's|${exec_prefix}|/usr|' %{buildroot}%{_unitdir}/%{name}.service
-%endif
-
 # BUG? installed "doc files" have no content anyway...
-rm -r "$RPM_BUILD_ROOT"%{_prefix}/share/doc/openarc
+rm -r "$RPM_BUILD_ROOT"%{_prefix}/share/doc/openarc/*
 
 install -p -d "$RPM_BUILD_ROOT"%{_sysconfdir}/
 cat > "$RPM_BUILD_ROOT"%{_sysconfdir}/openarc.conf <<EOF
@@ -114,10 +96,12 @@ Selector seal
 KeyFile %{_sysconfdir}/openarc/seal.private
 EOF
 
-install -p -d "$RPM_BUILD_ROOT"/usr/lib/tmpfiles.d/
-cat > "$RPM_BUILD_ROOT"/usr/lib/tmpfiles.d/%{name}.conf <<EOF
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?suse_version} >= 1200 || 0%{?mageia} >= 6
+install -p -d "$RPM_BUILD_ROOT"%{_tmpfilesdir}
+cat > "$RPM_BUILD_ROOT"%{_tmpfilesdir}/%{name}.conf <<EOF
 D /run/%{name} 0755 %{name} %{name} -
 EOF
+%endif
 
 %pre
 getent group  openarc >/dev/null || %{_sbindir}/groupadd -r openarc
@@ -136,17 +120,22 @@ if [ ! -d %{_sysconfdir}/openarc ]; then
   chmod 0640 %{_sysconfdir}/openarc/seal.private
 	chown -R openarc:openarc %{_sysconfdir}/openarc
 fi
-if [ -x /sbin/chkconfig ]; then
-        /sbin/chkconfig --add openarc
-elif [ -x /usr/lib/lsb/install_initd ]; then
-        /usr/lib/lsb/install_initd openarc
-fi
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?suse_version} >= 1200 || 0%{?mageia} >= 6
 %tmpfiles_create %_tmpfilesdir/%{name}.conf
 %service_add_post openarc.service
 # enable the service
 ln -s %{_unitdir}/%{name}.service %{_sysconfdir}/systemd/system/multi-user.target.wants/%{name}.service || :
 # start the service
 %{_sbindir}/rc%{name} start || :
+%else
+if [ -x /sbin/chkconfig ]; then
+        /sbin/chkconfig --add openarc
+%if 0%{?suse_version} >= 1200 
+elif [ -x /usr/lib/lsb/install_initd ]; then
+        /usr/lib/lsb/install_initd openarc
+%endif
+fi
+%endif
 
 %preun
 %if 0%{?suse_version} >= 1200
@@ -170,7 +159,6 @@ fi
 %postun
 %if 0%{?suse_version} >= 1200
 %service_del_postun openarc.service
-#%else
 %endif
 
 %post -n libopenarc0 -p /sbin/ldconfig
@@ -189,18 +177,13 @@ fi
 %config(noreplace) %{_sysconfdir}/openarc.conf
 %{_mandir}/*/*
 %{_sbindir}/*
-%if 0%{?suse_version} >= 1200
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?suse_version} >= 1200 || 0%{?mageia} >= 6
 %{_unitdir}/%{name}.service
-/usr/lib/tmpfiles.d/%{name}.conf
-%endif
-%if 0%{?rhel} >= 7
-%{_unitdir}/%{name}.service
-%endif
-%if 0%{?rhel} == 6
+%{_tmpfilesdir}/%{name}.conf
+%else
 %config %{_initrddir}/%{name}
 %endif
 
-/usr/lib/tmpfiles.d/%{name}.conf
 %ghost %attr(755, openarc, openarc) /run/%{name}
 
 %files -n libopenarc0
@@ -216,6 +199,8 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sun Aug 05 2018 <seriv@cs.umd.edu> - 1.0.0.beta0-8.5%{?dist}
+- Made installable for >=RHEL6, >=FC26, >=OpenSUSE12, and >=Mageia6
 * Fri Aug 03 2018 <seriv@cs.umd.edu> - 1.0.0.beta0-8.4
 - Made installable for RHEL6 and RHEL7
 * Wed Aug 01 2018 <rpmbuild@openarc.org> - 1.0.0
