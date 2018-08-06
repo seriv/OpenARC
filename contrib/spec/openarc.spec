@@ -6,10 +6,12 @@ Name:		openarc
 Version:	1.0.0
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
 Release:	beta0.9%{?dist}
-%elif 0%{?mageia} >= 6
+%else
+%if 0%{?mageia} >= 6
 Release:	%mkrel -c beta0 9
 %else 
 Release:	beta0.9
+%endif
 %endif
 
 %define DebianRelease 2
