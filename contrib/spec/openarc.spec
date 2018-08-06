@@ -3,8 +3,15 @@
 
 Summary:	An open source library and milter for providing ARC service
 Name:		openarc
-Version:	1.0.0.beta0
-Release:	8.5%{?dist}
+Version:	1.0.0
+%if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
+Release:	beta0.9%{?dist}
+%elif 0%{?mageia} >= 6
+Release:	%mkrel -c beta0 9
+%else 
+Release:	beta0.9
+%endif
+
 %define DebianRelease 2
 License:	BSD-2-Clause
 Group:		System Environment/Daemons
