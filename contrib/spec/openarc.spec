@@ -86,8 +86,6 @@ mkdir -p "$RPM_BUILD_ROOT"%{_initrddir}
 install -m 0755 contrib/init/redhat/openarc "$RPM_BUILD_ROOT"%{_initrddir}/%{name}
 %endif
 
-ln -s service %{buildroot}%{_sbindir}/rc%{name}
-
 # BUG? installed "doc files" have no content anyway...
 rm -r "$RPM_BUILD_ROOT"%{_prefix}/share/doc/openarc/*
 
@@ -131,11 +129,9 @@ if [ ! -d %{_sysconfdir}/openarc ]; then
 fi
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?suse_version} >= 1200 || 0%{?mageia} >= 6
 %tmpfiles_create %_tmpfilesdir/%{name}.conf
+if 0%{?suse_version} >=1200
 %service_add_post openarc.service
-# enable the service
-ln -s %{_unitdir}/%{name}.service %{_sysconfdir}/systemd/system/multi-user.target.wants/%{name}.service || :
-# start the service
-%{_sbindir}/rc%{name} start || :
+%endif
 %else
 if [ -x /sbin/chkconfig ]; then
         /sbin/chkconfig --add openarc
