@@ -1,4 +1,16 @@
-OPENARC README
+This fork README.
+This is the fork of the trusteddomainproject/OpenARC repository created
+to serve as a repository for Fedora COPR service for package building.
+The COPR project is here:
+https://copr.fedorainfracloud.org/coprs/seriv/OpenARC/
+
+Branches "master" and "develop" are tracking upstream, while for COPR
+there is a branch 'for_copr'. 
+
+There are also branches created off "develop" for pull requests to the 
+upstream repository.
+
+Here is an upstream OPENARC README
 ==============
 
 This directory has the latest open source ARC filter software from The
