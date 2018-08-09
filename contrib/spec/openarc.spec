@@ -129,7 +129,7 @@ if [ ! -d %{_sysconfdir}/openarc ]; then
 fi
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7 || 0%{?suse_version} >= 1200 || 0%{?mageia} >= 6
 %tmpfiles_create %_tmpfilesdir/%{name}.conf
-if 0%{?suse_version} >=1200
+%if 0%{?suse_version} >=1200
 %service_add_post openarc.service
 %endif
 %else
