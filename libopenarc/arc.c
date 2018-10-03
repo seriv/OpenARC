@@ -3195,6 +3195,7 @@ arc_getseal(ARC_MESSAGE *msg, ARC_HDRFIELD **seal, char *authservid,
 			next = tmphdr->hdr_next;
 			ARC_FREE(tmphdr->hdr_text);
 			ARC_FREE(tmphdr);
+			tmphdr = next;
 		}
 
 		msg->arc_sealhead = NULL;
@@ -3205,7 +3206,7 @@ arc_getseal(ARC_MESSAGE *msg, ARC_HDRFIELD **seal, char *authservid,
 	**  Part 1: Construct a new AAR
 	*/
 
-	arc_dstring_printf(dstr, "ARC-Authentication-Results:i=%u; %s; %s",
+	arc_dstring_printf(dstr, "ARC-Authentication-Results:i=%u; %s; arc=%s",
 	                   msg->arc_nsets + 1,
 	                   msg->arc_authservid,
 	                   ar == NULL ? "none" : (char *) ar);
