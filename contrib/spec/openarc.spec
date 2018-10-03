@@ -8,16 +8,16 @@ Version:	1.0.0
 Release:	beta0.9%{?dist}
 %else
 %if 0%{?mageia} >= 6
-Release:	%mkrel -c beta0 9
+Release:	%mkrel -c beta1 0
 %else 
-Release:	beta0.9
+Release:	beta1
 %endif
 %endif
 
 %define DebianRelease 2
 License:	BSD-2-Clause
 Group:		System Environment/Daemons
-Requires:	libopenarc0 = %{version}-%{release}
+Requires:	libopenarc = %{version}-%{release}
 BuildRequires:	openssl-devel, xz
 BuildRequires:	libbsd-devel
 BuildRequires:	sendmail-devel
@@ -48,18 +48,18 @@ The Trusted Domain Project is a community effort to develop and maintain a
 C library for producing ARC-aware applications and an open source milter for
 providing ARC service through milter-enabled MTAs.
 
-%package -n libopenarc0
+%package -n libopenarc
 Summary: An open source ARC library
-Group: System/Libraries
+Group: System Environment/Libraries
 
-%description -n libopenarc0
+%description -n libopenarc
 This package contains the library files required for running services built
 using libopenarc.
 
 %package -n libopenarc-devel
 Summary: Development files for libopenarc
-Group: Development/Libraries/C and C++
-Requires: libopenarc0 = %{version}
+Group: Development/Libraries
+Requires: libopenarc = %{version}
 Requires: libbsd-devel
 
 %description -n libopenarc-devel
@@ -166,9 +166,9 @@ fi
 %service_del_postun openarc.service
 %endif
 
-%post -n libopenarc0 -p /sbin/ldconfig
+%post -n libopenarc -p /sbin/ldconfig
 
-%postun -n libopenarc0 -p /sbin/ldconfig
+%postun -n libopenarc -p /sbin/ldconfig
 
 %clean
 if [ "$RPM_BUILD_ROOT" != "/" ]; then
@@ -191,7 +191,7 @@ fi
 
 %ghost %attr(755, openarc, openarc) /run/%{name}
 
-%files -n libopenarc0
+%files -n libopenarc
 %defattr(-,root,root)
 %{_libdir}/*.so.*
 
@@ -204,6 +204,8 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Wed Oct 03 2018 <seriv@cs.umd.edu> - 1.0.0.beta1-0%{?dist}
+- Merge from beta1@upstream
 * Sun Aug 05 2018 <seriv@cs.umd.edu> - 1.0.0.beta0-8.5%{?dist}
 - Made installable for >=RHEL6, >=FC26, >=OpenSUSE12, and >=Mageia6
 * Fri Aug 03 2018 <seriv@cs.umd.edu> - 1.0.0.beta0-8.4
