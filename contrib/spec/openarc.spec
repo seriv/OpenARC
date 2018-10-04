@@ -5,12 +5,12 @@ Summary:	An open source library and milter for providing ARC service
 Name:		openarc
 Version:	1.0.0
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
-Release:	beta1.0%{?dist}
+Release:	0.1.Beta1%{?dist}
 %else
 %if 0%{?mageia} >= 6
-Release:	%mkrel -c beta1 0
+Release:	%mkrel -c Beta1 0
 %else 
-Release:	beta1
+Release:	Beta1
 %endif
 %endif
 
@@ -204,6 +204,8 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Thu Oct 04 2018 <seriv@cs.umd.edu> - 1.0.0-0.1.Beta1%{?dist}
+- Change version scheme to match that of epel
 * Wed Oct 03 2018 <seriv@cs.umd.edu> - 1.0.0.beta1-0%{?dist}
 - Merge from beta1@upstream
 * Sun Aug 05 2018 <seriv@cs.umd.edu> - 1.0.0.beta0-8.5%{?dist}
