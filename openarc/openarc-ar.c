@@ -63,6 +63,14 @@ struct lookup methods[] =
 	{ "sender-id",		ARES_METHOD_SENDERID },
 	{ "smime",		ARES_METHOD_SMIME },
 	{ "spf",		ARES_METHOD_SPF },
+	{ "x-trusted-ip",       ARES_METHOD_TRUSTEDIP },
+	{ "x-return-mx",	ARES_METHOD_MX },
+	{ "x-local-ip",		ARES_METHOD_LOCALIP },
+	{ "x-ptr",		ARES_METHOD_PTR },
+	{ "x-dkim-dkssp",	ARES_METHOD_DKSSP },
+	{ "x-dkim-ssp",		ARES_METHOD_SSP },
+	{ "senderid",		ARES_METHOD_SENDERID },
+	{ "compauth",		ARES_METHOD_COMPAUTH },
 	{ NULL,			ARES_METHOD_UNKNOWN }
 };
 
