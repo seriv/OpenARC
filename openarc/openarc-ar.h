@@ -37,6 +37,15 @@ typedef int ares_method_t;
 #define	ARES_METHOD_SMIME	9
 #define	ARES_METHOD_RRVS	10
 #define	ARES_METHOD_ARC		11
+#define	ARES_METHOD_MX		12
+#define	ARES_METHOD_TRUSTEDIP	13
+#define	ARES_METHOD_LOCALIP	14
+#define	ARES_METHOD_PTR		15
+#define	ARES_METHOD_DKSSP	16
+#define	ARES_METHOD_SSP		17
+#define	ARES_METHOD_SENDERID	18
+#define	ARES_METHOD_COMPAUTH	19
+#define	ARES_METHOD_UNKNOWN	20
 
 /* ARES_RESULT_T -- type for specifying an authentication result */
 typedef int ares_result_t;
