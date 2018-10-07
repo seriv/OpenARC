@@ -5,7 +5,7 @@ Summary:	An open source library and milter for providing ARC service
 Name:		openarc
 Version:	1.0.0
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
-Release:	0.2.Beta1%{?dist}
+Release:	0.3.Beta1%{?dist}
 %else
 %if 0%{?mageia} >= 6
 Release:	%mkrel -c Beta1 0
