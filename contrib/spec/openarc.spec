@@ -5,7 +5,7 @@ Summary:	An open source library and milter for providing ARC service
 Name:		openarc
 Version:	1.0.0
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
-Release:	0.1.Beta1%{?dist}
+Release:	0.2.Beta1%{?dist}
 %else
 %if 0%{?mageia} >= 6
 Release:	%mkrel -c Beta1 0
@@ -72,7 +72,7 @@ required for developing applications against libopenarc.
 %build
 aclocal
 autoreconf -i || :
-./configure --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --libdir=%{_libdir} --mandir=%{_mandir}
+./configure --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --libdir=%{_libdir} --mandir=%{_mandir} CFLAGS="-g3 -O0 $CFLAGS" 
 make
 
 %install
@@ -204,6 +204,8 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Fri Oct 05 2018 <seriv@cs.umd.edu> - 1.0.0-0.2.Beta1%{?dist}
+- Rebuilding with debugging mode in CFLAGS
 * Thu Oct 04 2018 <seriv@cs.umd.edu> - 1.0.0-0.1.Beta1%{?dist}
 - Change version scheme to match that of epel
 * Wed Oct 03 2018 <seriv@cs.umd.edu> - 1.0.0.beta1-0%{?dist}
