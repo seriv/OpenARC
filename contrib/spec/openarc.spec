@@ -204,6 +204,8 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
+* Sat Oct 06 2018 <seriv@cs.umd.edu> - 1.0.0-0.3.Beta1%{?dist}
+- Add more authentication methods and ignore undefined methonds
 * Fri Oct 05 2018 <seriv@cs.umd.edu> - 1.0.0-0.2.Beta1%{?dist}
 - Rebuilding with debugging mode in CFLAGS
 * Thu Oct 04 2018 <seriv@cs.umd.edu> - 1.0.0-0.1.Beta1%{?dist}
