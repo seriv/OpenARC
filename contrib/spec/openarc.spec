@@ -204,7 +204,7 @@ fi
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
-* Mon Nev 19 2018 <seriv@cs.umd.edu> - 1.0.0-beta2.0%{?dist}
+* Mon Nov 19 2018 <seriv@cs.umd.edu> - 1.0.0-beta2.0%{?dist}
 - Comply with fedora epel package versioning, 
 - Rebase on beta2 upstream.
 * Sat Oct 06 2018 <seriv@cs.umd.edu> - 1.0.0-0.3.Beta1%{?dist}
